@@ -6,3 +6,5 @@ See [Changelog](https://github.com/Alterdata/NCalc-NetCore/wiki/Changelog) for m
 See [the wiki](https://github.com/Alterdata/NCalc-NetCore/wiki) for instructions on usage
 
 [![Nuget](https://img.shields.io/nuget/v/NCalc.NetCore.svg)](https://nuget.org/packages/NCalc.NetCore/)
+
+[![Build status](https://ci.appveyor.com/api/projects/status/c2epgt465hxo5bff?svg=true)](https://ci.appveyor.com/project/tonyrapozo/ncalc-netcore)
