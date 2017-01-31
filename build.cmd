@@ -1,4 +1,4 @@
 @ECHO OFF
 dotnet restore
-dotnet test NCalc.Tests -appveyor
-dotnet pack NCalc --configuration Release
+dotnet test NCalc.NetCore.Tests -appveyor
+dotnet pack NCalc.NetCore --configuration Release

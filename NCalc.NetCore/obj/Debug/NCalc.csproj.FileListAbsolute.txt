@@ -1,0 +1,5 @@
+C:\Projetos\NCalc-NetCore\NCalc\bin\Debug\NCalc.NetCore.dll
+C:\Projetos\NCalc-NetCore\NCalc\bin\Debug\NCalc.NetCore.pdb
+C:\Projetos\NCalc-NetCore\NCalc\obj\Debug\NCalc.csprojResolveAssemblyReference.cache
+C:\Projetos\NCalc-NetCore\NCalc\obj\Debug\NCalc.NetCore.dll
+C:\Projetos\NCalc-NetCore\NCalc\obj\Debug\NCalc.NetCore.pdb
