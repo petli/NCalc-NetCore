@@ -5,5 +5,5 @@ clone_depth: 1
 test: off
 deploy: off
 artifacts:
-  - path: NCalc\bin\Release\*.nupkg
+  - path: NCalc.NetCore\bin\Release\*.nupkg
     name: NCalc.NetCore
