@@ -1,0 +1,4 @@
+C:\Projetos\NCalc-NetCore\NCalc\bin\Debug\NCalc.dll
+C:\Projetos\NCalc-NetCore\NCalc\bin\Debug\NCalc.pdb
+C:\Projetos\NCalc-NetCore\NCalc\obj\Debug\NCalc.dll
+C:\Projetos\NCalc-NetCore\NCalc\obj\Debug\NCalc.pdb
