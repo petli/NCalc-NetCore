@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <AssemblyName>NCalc</AssemblyName>
+    <PackageId>NCalc.NetCore</PackageId>
+    <RootNamespace>NCalc</RootNamespace>
+    <GenerateFullPaths>true</GenerateFullPaths>
+    <OutputType>Library</OutputType>
+  </PropertyGroup>
+  <PropertyGroup>
+    <TargetFrameworks>netstandard2.0</TargetFrameworks>
+  </PropertyGroup>
+  <PropertyGroup>
+    <Version>1.0.1.0</Version>
+  </PropertyGroup>
+  <PropertyGroup>
+    <Authors>joseantonio.dsn.erp@alterdata.com.br, bernardo.dsn.erp@alterdata.com.br</Authors>
+    <Company>Alterdata Software</Company>
+    <NeutralLanguage>en-US</NeutralLanguage>
+    <AssemblyTitle>NCalc</AssemblyTitle>
+    <Description>
+      .NetCore Port of NCalc from https://github.com/pitermarx/NCalc-Edge.
+    </Description>
+    <Copyright>Copyright © Alterdata Software</Copyright>
+    <UserSecretsId>Alterdata Software</UserSecretsId>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Antlr3.Runtime" Version="3.5.1" />
+  </ItemGroup>
+</Project>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <AssemblyName>NCalc.Test</AssemblyName>
+    <PackageId>NCalc.Test</PackageId>
+    <RootNamespace>NCalc.Test</RootNamespace>
+    <GenerateFullPaths>true</GenerateFullPaths>
+    <OutputType>Library</OutputType>
+  </PropertyGroup>
+  <PropertyGroup>
+    <TargetFrameworks>netcoreapp2.0</TargetFrameworks>
+  </PropertyGroup>
+  <PropertyGroup>
+    <Version>1.0.0.0</Version>
+  </PropertyGroup>
+  <PropertyGroup>
+    <Authors>joseantonio.dsn.erp@alterdata.com.br, bernardo.dsn.erp@alterdata.com.br</Authors>
+    <Company>Alterdata Software</Company>
+    <NeutralLanguage>en-US</NeutralLanguage>
+    <AssemblyTitle>NCalc.Test</AssemblyTitle>
+    <Description>
+      Classe de testes do NCalc.
+    </Description>
+    <Copyright>Copyright © Alterdata Software</Copyright>
+    <UserSecretsId>Alterdata Software</UserSecretsId>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.5.0" />
+    <PackageReference Include="NUnit" Version="3.8.1" />
+    <PackageReference Include="NUnit3TestAdapter" Version="3.9.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\NCalc\NCalc.csproj" />
+  </ItemGroup>
+</Project>
