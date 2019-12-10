@@ -1,3 +1,5 @@
+using System.Threading.Tasks;
+
 namespace NCalc.Domain
 {
     public class BinaryExpression : LogicalExpression
@@ -18,6 +20,11 @@ namespace NCalc.Domain
         public override void Accept(LogicalExpressionVisitor visitor)
         {
             visitor.Visit(this);
+        }
+
+        public override async Task AcceptAsync(IAsyncLogicalExpressionVisitor visitor)
+        {
+            await visitor.VisitAsync(this);
         }
     }
 

@@ -1,0 +1,7 @@
+﻿[*.cs]
+
+# CS4014: Because this call is not awaited, execution of the current method continues before the call is completed. Consider applying the 'await' operator to the result of the call.
+dotnet_diagnostic.CS4014.severity = error
+
+# LindhartAnalyserMissingAwaitWarning: The method 'NCalc.Domain.LogicalExpression.AcceptAsync(NCalc.Domain.IAsyncLogicalExpressionVisitor)' returns a Task that was not awaited
+dotnet_diagnostic.LindhartAnalyserMissingAwaitWarning.severity = error

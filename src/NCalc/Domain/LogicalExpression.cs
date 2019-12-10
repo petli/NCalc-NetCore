@@ -1,5 +1,6 @@
 using System;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace NCalc.Domain
 {
@@ -233,6 +234,11 @@ namespace NCalc.Domain
         public virtual void Accept(LogicalExpressionVisitor visitor)
         {
             visitor.Visit(this);
+        }
+
+        public virtual async Task AcceptAsync(IAsyncLogicalExpressionVisitor visitor)
+        {
+            await visitor.VisitAsync(this);
         }
     }
 }

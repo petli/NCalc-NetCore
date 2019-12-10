@@ -1,4 +1,6 @@
-﻿namespace NCalc
+﻿using System.Threading.Tasks;
+
+namespace NCalc
 {
     using System.Collections.Generic;
     using System.Collections;
@@ -22,7 +24,17 @@
         /// </summary>
         protected string OriginalExpression;
 
-        public Expression(string expression, EvaluateOptions options = EvaluateOptions.None)
+        private readonly Func<string, ParameterArgs, Task> parameterEvaluator;
+        private readonly Func<string, FunctionArgs, Task> functionEvaluator;
+
+        /// <summary>
+        /// Construct a new expression from a string.
+        /// </summary>
+        /// <param name="expression"></param>
+        /// <param name="options"></param>
+        /// <param name="parameterEvaluator">Async parameter evaluator, which can be overridden when calling <see cref="EvaluateAsync"/>.</param>
+        /// <param name="functionEvaluator">Async function evaluator, which can be overridden when calling <see cref="EvaluateAsync"/>.</param>
+        public Expression(string expression, EvaluateOptions options = EvaluateOptions.None, Func<string, ParameterArgs, Task> parameterEvaluator = null, Func<string, FunctionArgs, Task> functionEvaluator = null)
         {
             if (String.IsNullOrEmpty(expression))
                 throw new
@@ -30,16 +42,27 @@
 
             OriginalExpression = expression;
             Options = options;
+            this.parameterEvaluator = parameterEvaluator;
+            this.functionEvaluator = functionEvaluator;
         }
 
-        public Expression(LogicalExpression expression, EvaluateOptions options = EvaluateOptions.None)
+        /// <summary>
+        /// Construct a new expression from an already parsed <see cref="LogicalExpression"/>.
+        /// </summary>
+        /// <param name="expression"></param>
+        /// <param name="options"></param>
+        /// <param name="parameterEvaluator">Async parameter evaluator, which can be overridden when calling <see cref="EvaluateAsync"/>.</param>
+        /// <param name="functionEvaluator">Async function evaluator, which can be overridden when calling <see cref="EvaluateAsync"/>.</param>
+        public Expression(LogicalExpression expression, EvaluateOptions options = EvaluateOptions.None, Func<string, ParameterArgs, Task> parameterEvaluator = null, Func<string, FunctionArgs, Task> functionEvaluator = null)
         {
             if (expression == null)
                 throw new
             ArgumentException("Expression can't be null", "expression");
-
+            
             ParsedExpression = expression;
             Options = options;
+            this.parameterEvaluator = parameterEvaluator;
+            this.functionEvaluator = functionEvaluator;
         }
 
         #region Cache management
@@ -181,7 +204,51 @@
         protected Dictionary<string, IEnumerator> ParameterEnumerators;
         protected Dictionary<string, object> ParametersBackup;
 
+        /// <summary>
+        /// Evaluate an expression synchronously (legacy interface).
+        /// </summary>
+        /// <remarks>
+        /// The event handlers on <see cref="EvaluateFunction"/> and <see cref="EvaluateParameter"/>
+        /// are invoked before any async evaluator functions provided when constructing the object.
+        /// </remarks>
+        /// <returns></returns>
         public object Evaluate()
+        {
+            Task EvaluateFunctionAsync(string name, FunctionArgs args)
+            {
+                EvaluateFunction?.Invoke(name, args);
+                return functionEvaluator?.Invoke(name, args) ?? Task.CompletedTask;
+            }
+
+            Task EvaluateParameterAsync(string name, ParameterArgs args)
+            {
+                EvaluateParameter?.Invoke(name, args);
+                return parameterEvaluator?.Invoke(name, args) ?? Task.CompletedTask;
+            }
+
+            try
+            {
+                return EvaluateAsync(parameterEvaluator:EvaluateParameterAsync, functionEvaluator:EvaluateFunctionAsync).Result;
+            }
+            catch (AggregateException e)
+            {
+                if (e.InnerException != null)
+                {
+                    throw e.InnerException;
+                }
+
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// Evaluate an expression asynchronously.
+        /// </summary>
+        /// <param name="parameterEvaluator">Override any async parameter evaluator provided when constructing the Expression.</param>
+        /// <param name="functionEvaluator">Override any async function evaluator provided when constructing the Expression.</param>
+        /// <returns>A result task that resolves to the result of the expression</returns>
+        public async Task<object> EvaluateAsync(Func<string, ParameterArgs, Task> parameterEvaluator = null,
+            Func<string, FunctionArgs, Task> functionEvaluator = null)
         {
             if (HasErrors())
             {
@@ -193,9 +260,7 @@
                 ParsedExpression = Compile(OriginalExpression, Options.NoCache());
             }
 
-            var visitor = new EvaluationVisitor(Options);
-            visitor.EvaluateFunction += EvaluateFunction;
-            visitor.EvaluateParameter += EvaluateParameter;
+            var visitor = new EvaluationVisitor(Options, parameterEvaluator ?? this.parameterEvaluator, functionEvaluator ?? this.functionEvaluator);
             visitor.Parameters = Parameters;
 
             // if array evaluation, execute the same expression multiple times
@@ -247,19 +312,31 @@
                         Parameters[key] = enumerator.Current;
                     }
 
-                    ParsedExpression.Accept(visitor);
+                    await ParsedExpression.AcceptAsync(visitor);
                     results.Add(visitor.Result);
                 }
 
                 return results;
             }
 
-            ParsedExpression.Accept(visitor);
+            await ParsedExpression.AcceptAsync(visitor);
             return visitor.Result;
         }
 
+        /// <summary>
+        /// Function evaluator event handlers, only supported when calling <see cref="Evaluate"/>.
+        /// </summary>
+        /// <remarks>
+        /// The event handlers will be called before any async function evaluator provided when constructing the <see cref="Expression"/>.
+        /// </remarks>
         public event EvaluateFunctionHandler EvaluateFunction;
 
+        /// <summary>
+        /// Parameter evaluator event handlers, only supported when calling <see cref="Evaluate"/>.
+        /// </summary>
+        /// <remarks>
+        /// The event handlers will be called before any async parameter evaluator provided when constructing the <see cref="Expression"/>.
+        /// </remarks>
         public event EvaluateParameterHandler EvaluateParameter;
 
         private Dictionary<string, object> parameters;

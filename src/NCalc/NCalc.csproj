@@ -25,6 +25,10 @@
     <UserSecretsId>Alterdata Software</UserSecretsId>
   </PropertyGroup>
   <ItemGroup>
+    <None Include="..\..\.editorconfig" Link=".editorconfig" />
+  </ItemGroup>
+  <ItemGroup>
     <PackageReference Include="Antlr3.Runtime" Version="3.5.1" />
+    <PackageReference Include="Lindhart.Analyser.MissingAwaitWarning" Version="1.2.0" />
   </ItemGroup>
 </Project>

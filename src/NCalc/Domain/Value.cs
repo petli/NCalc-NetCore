@@ -1,5 +1,5 @@
 using System;
-using System.Reflection;
+using System.Threading.Tasks;
 
 namespace NCalc.Domain
 {
@@ -88,6 +88,11 @@ namespace NCalc.Domain
         public override void Accept(LogicalExpressionVisitor visitor)
         {
             visitor.Visit(this);
+        }
+
+        public override async Task AcceptAsync(IAsyncLogicalExpressionVisitor visitor)
+        {
+            await visitor.VisitAsync(this);
         }
     }
 
